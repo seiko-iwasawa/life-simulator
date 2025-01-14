@@ -2,29 +2,43 @@ import pyglet
 from food import Food
 from fish import Fish
 import random
+import config
 
 
 class Field:
     def __init__(self, batch: pyglet.graphics.Batch):
         self.batch = batch
         self.background = pyglet.shapes.Rectangle(
-            0, 0, 800, 800, color=(0, 0, 255), batch=batch
+            0,
+            0,
+            config.WIDTH,
+            config.HEIGHT,
+            color=config.BACKGROUND_COLOR,
+            batch=batch,
         )
         self.food: list[Food] = []
         self.fishes = [
-            Fish(random.randint(0, 800), random.randint(0, 800), self.batch)
-            for n in range(15)
+            Fish(
+                random.randint(0, config.WIDTH),
+                random.randint(0, config.HEIGHT),
+                self.batch,
+            )
+            for n in range(config.FISH_N)
         ]
 
     def gen_food(self):
         self.food.append(
-            Food(random.randint(0, 800), random.randint(0, 800), self.batch)
+            Food(
+                random.randint(0, config.WIDTH),
+                random.randint(0, config.HEIGHT),
+                self.batch,
+            )
         )
 
     def update(self, dt: float):
         for fish in self.fishes:
             fish.update(self.food, self.fishes, dt)
-        if len(self.food) < 100:
+        if len(self.food) < config.FOOD_N:
             self.gen_food()
         self.intersect()
 

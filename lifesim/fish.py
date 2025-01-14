@@ -1,11 +1,12 @@
 import pyglet
 from food import Food
+import config
 
 
 class Fish(pyglet.shapes.Circle):
     def __init__(self, x: int, y: int, batch: pyglet.graphics.Batch):
-        super().__init__(x, y, 10, color=(255, 50, 0), batch=batch)
-        self.speed = 20
+        super().__init__(x, y, config.FISH_SIZE, color=config.FISH_COLOR, batch=batch)
+        self.speed = config.FISH_SPEED
 
     def update(self, food: list[Food], fishes: list["Fish"], dt: float):
         if not food:
