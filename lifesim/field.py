@@ -30,15 +30,12 @@ class Field:
     def intersect(self):
         for fish in self.fishes:
             for other in self.fishes:
-                if (
-                    fish != other
-                    and util.dist(fish, other) <= fish.radius + other.radius
-                ):
+                if fish != other and util.intersect(fish, other):
                     self.fishes.pop(self.fishes.index(other))
                     return True
         for fish in self.fishes:
             for food in self.food:
-                if util.dist(fish, food) <= fish.radius + food.radius:
+                if util.intersect(fish, food):
                     self.food.pop(self.food.index(food))
                     return True
         return False
