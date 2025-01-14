@@ -1,8 +1,8 @@
 import pyglet
 from food import Food
 from fish import Fish
-import random
 import config
+import util
 
 
 class Field:
@@ -17,23 +17,10 @@ class Field:
             batch=batch,
         )
         self.food: list[Food] = []
-        self.fishes = [
-            Fish(
-                random.randint(0, config.WIDTH),
-                random.randint(0, config.HEIGHT),
-                self.batch,
-            )
-            for n in range(config.FISH_N)
-        ]
+        self.fishes = [util.gen_fish(self.batch) for n in range(config.FISH_N)]
 
     def gen_food(self):
-        self.food.append(
-            Food(
-                random.randint(0, config.WIDTH),
-                random.randint(0, config.HEIGHT),
-                self.batch,
-            )
-        )
+        self.food.append(util.gen_food(self.batch))
 
     def update(self, dt: float):
         for fish in self.fishes:
@@ -47,8 +34,7 @@ class Field:
         for food in self.food:
             flag = True
             for fish in self.fishes:
-                dist = ((fish.x - food.x) ** 2 + (fish.y - food.y) ** 2) ** 0.5
-                if dist <= fish.radius + food.radius:
+                if util.dist(fish, food) <= fish.radius + food.radius:
                     flag = False
             if flag:
                 new_food.append(food)

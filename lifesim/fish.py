@@ -1,6 +1,7 @@
 import pyglet
 from food import Food
 import config
+import util
 
 
 class Fish(pyglet.shapes.Circle):
@@ -11,10 +12,8 @@ class Fish(pyglet.shapes.Circle):
     def update(self, food: list[Food], fishes: list["Fish"], dt: float):
         if not food:
             return
-        near_food = min(
-            food, key=lambda f: ((f.x - self.x) ** 2 + (f.y - self.y) ** 2) ** 0.5
-        )
+        near_food = min(food, key=lambda f: util.dist(self, f))
         vec = (near_food.x - self.x, near_food.y - self.y)
-        dist = ((near_food.x - self.x) ** 2 + (near_food.y - self.y) ** 2) ** 0.5
+        dist = util.dist(self, near_food)
         self.x += vec[0] / dist * self.speed * dt
         self.y += vec[1] / dist * self.speed * dt
